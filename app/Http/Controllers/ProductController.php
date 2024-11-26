@@ -45,7 +45,12 @@ class ProductController extends Controller
         // Předá produkt do view
         return view('products.show', compact('product'));
     }
-
+    public function search(Request $request)
+        {
+            $query = $request->input('query');
+            $products = Product::where('name', 'LIKE', "%{$query}%")->get();
+            return view('products.index', compact('products'));
+        }
     /**
      * Show the form for editing the specified resource.
      */
