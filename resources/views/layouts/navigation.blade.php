@@ -18,8 +18,8 @@
                         {{ __('Products') }}
                     </x-nav-link>
                     <form method="GET" action="{{ route('products.search') }}" class="relative">
-                        <input type="text" name="query" placeholder="Search..." class="border rounded-md p-2" />
-                        <button type="submit" class="absolute right-0 top-0 mt-2 mr-2">
+                        <input type="text" name="query" placeholder="Search..." class="border rounded-md p-2 mt-3" />
+                        <button type="submit" class="absolute right-0 top-0 mt-6 mr-2">
                             <svg class="h-6 w-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                 <path fill="currentColor" d="M12.3 13.4c1.2-1.5 2-3.4 2-5.4C14.3 3.6 11.3 0 7 0S-0.3 3.6-0.3 7c0 3.4 2.7 6 6 6 2.1 0 3.9-.8 5.4-2 1.4 1.5 2.4 3.5 2.4 5.6h1.5c0-2.8-1-5.4-2.6-7.3zm-5.3 0C5 14.3 3 16 0 16c1.2 2 3.6 2 6 0 1-1 2-3 2-5.5zm1-6.4C8 3.5 9 2 9 2c1 0 3 1.4 3 2.1 0 .5-.4 1-1 1-.5 0-1 0-1-.5 0 0-.5-.5-1-1z" />
                             </svg>
