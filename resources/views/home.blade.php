@@ -2,17 +2,13 @@
 
 @section('content')
     <!-- Hero Section with Image and Gradient -->
-    <div class="relative h-screen">
+    <div class="relative h-screen pt-20">
         <!-- Obrázek na pozadí -->
-        <img src="https://imgs.search.brave.com/ko2Q7ZOGLlqvLvF_YRANMCfq0u33Z5RmFO9DCe4WCQw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/cHJvZC53ZWJzaXRl/LWZpbGVzLmNvbS81/YTllZTY0MTZlOTBk/MjAwMDFiMjAwMzgv/NjI4OWYwYmZhOTIw/YTk1OGYyYjQxNmY3/X2JsYWNrLWdyYWRp/ZW50LnBuZw" 
-            alt="Vítejte" 
-            class="absolute inset-0 object-cover w-full h-3/4 z-0">
-
+        
         <!-- Přechodový gradient -->
-        <div class="absolute inset-0 bg-gradient-to-b from-black to-transparent opacity-50 z-10"></div>
-
+        
         <!-- Text vycentrovaný přes obrázek -->
-        <div class="absolute inset-0 flex items-center justify-center z-20">
+        <div class="absolute inset-0 flex items-center justify-center">
             <h1 class="text-white text-5xl font-bold text-center">Vítejte na naší stránce!</h1>
         </div>
     </div>
