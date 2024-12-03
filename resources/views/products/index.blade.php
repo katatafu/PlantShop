@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-10 mx-auto">
-    <h1 class="text-3xl font-semibold text-center mb-8 text-white">Naše Produkty</h1>
+<div class="h-20"> </div>
+<div class="container py-10 mx-auto mt-8">
+    <h1 class="text-3xl font-semibold text-center mb-8 text-white mt-8 !important">Naše Produkty</h1>
 
     <!-- CSS pro Grid -->
     <style>

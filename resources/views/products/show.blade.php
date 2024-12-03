@@ -2,6 +2,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="h-20"> </div>
     <div class="container mt-20 px-4 sm:px-6 lg:px-8 mx-auto relative top-11">
         <!-- Back Button (Přesunuto doleva nahoře) -->
         <div class="absolute top-0 left-0 mt-6 ml-6">
