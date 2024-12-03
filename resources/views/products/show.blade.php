@@ -5,7 +5,7 @@
 <div class="h-20"> </div>
     <div class="container mt-20 px-4 sm:px-6 lg:px-8 mx-auto relative top-11">
         <!-- Back Button (Přesunuto doleva nahoře) -->
-        <div class="absolute top-0 left-0 mt-6 ml-6">
+        <div class="fixed top-10 left-6 z-50">
             <a href="{{ route('products.index') }}" class="btn btn-secondary bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-md">
                 Back to Products
             </a>
@@ -30,4 +30,5 @@
             </div>
         </div>
     </div>
+    
 @endsection

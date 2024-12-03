@@ -7,7 +7,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContactController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
