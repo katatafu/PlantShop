@@ -21,7 +21,7 @@
             <main>
     @yield('content')
             </main>
-
+            @include('components.contact-form')
             @include('components.footer')
         </div>
     </body>
