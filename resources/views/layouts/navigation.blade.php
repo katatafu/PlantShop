@@ -20,8 +20,8 @@
                     <x-nav-link :href="route('contact.index')" :active="request()->routeIs('contact.index')">
                         {{ __('Contact') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                        {{ __('About') }}
+                    <x-nav-link :href="route('questions.index')" :active="request()->routeIs('questions.index')">
+                        {{ __('Questions') }}
                     </x-nav-link>
                     <form method="GET" action="{{ route('products.search') }}" class="relative">
                         <input type="text" name="query" placeholder="Search..." class="border rounded-md p-2 mt-3" />
