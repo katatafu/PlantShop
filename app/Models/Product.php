@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory; 
-    
+      // Primární klíč
+    protected $primaryKey = 'id';
+
     protected $fillable = [
         'name', 'description', 'price', 'sku', 'in_stock'
     ];

@@ -8,4 +8,5 @@
         Máte otázky? Vyplňte formulář níže a my se vám co nejdříve ozveme!
     </p>
 </div>
+@include('components.contact-form')
 @endsection

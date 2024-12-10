@@ -97,6 +97,12 @@
             <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
                 {{ __('Products') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('contact.index')" :active="request()->routeIs('contact.index')">
+                {{ __('Contact') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('questions.index')" :active="request()->routeIs('questions.index')">
+                {{ __('Questions') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
