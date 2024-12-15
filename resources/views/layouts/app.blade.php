@@ -26,6 +26,11 @@
             font-family: 'Arial', sans-serif;
             overflow: auto; /* Allow scrolling */
         }
+        .layout-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
         /* Black overlay and transition */
         .page-transition {
@@ -80,7 +85,7 @@
     </style>
 </head>
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div class="layout-wrapper bg-gray-100 dark:bg-gray-900">
         <!-- Page transition overlay with "Barvio" text -->
         <div class="page-transition">
             <div class="transition-text">Barvio</div>
@@ -155,6 +160,7 @@
                 document.body.style.overflow = 'auto';  // Ensure scrolling is enabled
             }
         });
+        console.log('Page transition completed');
     </script>
 </body>
 </html>
