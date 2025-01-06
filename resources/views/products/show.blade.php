@@ -26,11 +26,11 @@
             </div>
 
             <!-- Product Information Section -->
-            <div class="w-2/3 pl-4">
+            <div class="w-1/2 pl-4">
                 <h1 class="text-3xl font-semibold text-gray-800 mb-4">{{ $product->name }}</h1>
                 <p class="text-lg text-gray-600 mb-4">{{ $product->description }}</p>
                 <div class="flex justify-between text-lg font-medium text-gray-800">
-                    <p><strong>Price: </strong>${{ $product->price }}</p>
+                    <p><strong>Price: </strong>{{ $product->price }} Kč</p>
                     <p><strong>SKU: </strong>{{ $product->sku }}</p>
                 </div>
                 <div class="flex justify-between text-lg font-medium text-gray-800 mt-2">

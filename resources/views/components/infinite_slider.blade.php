@@ -12,7 +12,7 @@
         <div class="min-w-[200px] bg-white shadow-md rounded-lg p-4">
             <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-full h-48 object-cover rounded-lg mb-4">
             <h3 class="text-xl font-semibold text-gray-800">{{ $product->name }}</h3>
-            <p class="text-lg text-gray-600">${{ $product->price }}</p>
+            <p class="text-lg text-gray-600">{{ $product->price }} Kč</p>
             <a href="{{ route('products.show', $product->id) }}" class="text-blue-500 hover:text-blue-600">View Product</a>
         </div>
         @endforeach
