@@ -18,13 +18,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <!-- Custom Styles -->
-    <style>
+    <style>     
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
             font-family: 'Arial', sans-serif;
             overflow: auto; /* Allow scrolling */
+        }
+        html {
+            scrollbar-width: normal;
+            scrollbar-color: rgb(70, 70, 77);
+        }
+        body{
+            background-color: grey;
+            color: rgb(0, 0, 0)
         }
         .layout-wrapper {
             display: flex;
@@ -82,6 +90,7 @@
         .content-visible {
             opacity: 1;
         }
+        
     </style>
 </head>
 <body class="font-sans antialiased">
