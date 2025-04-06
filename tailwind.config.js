@@ -12,13 +12,14 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                'share-regular': ['Share-Regular', 'sans-serif'],
+                'share-mono': ['Share-TechMono', ''],
+                'august': ['Hey-august', 'serif'],
             },
         },
     },
 
     plugins: [
-        forms,
-        require('@tailwindcss/line-clamp'),
+        
     ],
 };
