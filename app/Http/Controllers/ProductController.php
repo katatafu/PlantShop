@@ -3,79 +3,68 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-
-    public function index()
+    // Přehled produktů s filtrováním podle kategorie
+    public function index(Request $request): View
     {
-        // Načte všechny produkty z databáze
-        $products = Product::all();
+        $query = Product::query();
 
-        // Předá produkty do view
+        if ($request->has('category') && $request->category !== 'Všechny') {
+            $query->where('category', $request->category);
+        }
+
+        $products = $query->get();
+
         return view('products.index', compact('products'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Detail jednoho produktu
+    public function show($id): View
+    {
+        $product = Product::findOrFail($id);
+
+        $relatedProducts = Product::where('id', '!=', $product->id)
+            ->inRandomOrder()
+            ->take(10)
+            ->get();
+
+        return view('products.show', compact('product', 'relatedProducts'));
+    }
+
+    // Vyhledávání produktů
+    public function search(Request $request): View
+    {
+        $query = $request->input('query');
+        $products = Product::where('name', 'LIKE', "%{$query}%")->get();
+
+        return view('products.index', compact('products'));
+    }
+
+    // CRUD funkce (zatím prázdné)
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-      public function show($id)
-            {
-                   $product = Product::findOrFail($id);
-
-                // Get related products (you can adjust the logic to suit your needs)
-                    $relatedProducts = Product::where('id', '!=', $product->id)
-                    ->inRandomOrder()
-                    ->take(10)
-                    ->get();
-
-
-                // Předá produkt do view
-                return view('products.show', compact('product','relatedProducts'));
-            }
-    public function search(Request $request)
-        {
-            $query = $request->input('query');
-            $products = Product::where('name', 'LIKE', "%{$query}%")->get();
-            return view('products.index', compact('products'));
-        }
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Product $product)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Product $product)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Product $product)
     {
         //
