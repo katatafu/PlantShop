@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@tailwindcss/line-clamp": "^0.4.4",
+        "aos": "^2.3.4",
         "swiper": "^11.1.14"
     }
 }
