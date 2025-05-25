@@ -1,70 +1,81 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="h-20"> </div>
-<div class="container py-10 mx-auto mt-8">
-    <h1 class="text-3xl font-semibold text-center mb-8 text-white mt-8 !important">Naše Produkty</h1>
+<div class="h-20"></div>
 
-    <!-- CSS pro Grid -->
-    <style>
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
+<div class="container mx-auto mt-8 px-4">
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Produkty vlevo -->
+        <div class="lg:w-3/4">
+            <h1 class="text-3xl font-semibold text-white mb-6">Naše Produkty</h1>
 
-        .product-card {
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+            <!-- Filtrování -->
+            <form action="{{ route('products.index') }}" method="GET" class="flex flex-col md:flex-row gap-4 mb-6">
+                <select name="category" class="px-4 py-2 rounded bg-gray-800 text-white">
+                    <option value="Všechny">Všechny</option>
+                    <option value="Kaktusy">Kaktusy</option>
+                    <option value="Sukulenty">Sukulenty</option>
+                    <option value="Palmy">Palmy</option>
+                    <option value="Bylinky">Bylinky</option>
+                </select>
+                <button type="submit" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition">
+                    Filtrovat
+                </button>
+            </form>
 
-        .product-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
+            <!-- Grid s produkty -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                @foreach($products as $product)
+                    <div class="bg-black bg-opacity-50 rounded-lg shadow-md overflow-hidden hover:scale-105 transition transform duration-300">
+                        <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/300' }}" class="w-full h-48 object-cover">
+                        <div class="p-4 text-white text-center">
+                            <h2 class="text-xl font-bold mb-2">{{ $product->name }}</h2>
+                            <p class="text-sm text-gray-300">{{ $product->description }}</p>
+                            <p class="text-indigo-400 font-bold mt-2">Cena: {{ $product->price }} Kč</p>
 
-        .product-card .product-description {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .btn-primary {
-            display: block;
-            text-align: center;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border-radius: 4px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-    </style>
-
-    <div class="product-grid">
-        @foreach($products as $product)
-            <div class="product-card">
-                <img src="https://via.placeholder.com/300" alt="{{ $product->name }}">
-                <div class="p-4">
-                    <h2 class="text-xl font-semibold mb-2 text-center">{{ $product->name }}</h2>
-                    <p class="text-gray-600 mb-4 product-description">{{ $product->description }}</p>
-                    <p class="font-bold text-lg text-blue-600 mb-4 text-center">Cena: {{ $product->price }} Kč</p>
-                    <a href="{{ route('products.show', $product->id) }}" class="btn-primary">Zobrazit detaily</a>
-                </div>
+                            <form action="{{ route('cart.add', $product->id) }}" method="POST" class="mt-4">
+                                @csrf
+                                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+                                    Přidat do košíku
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @endforeach
             </div>
-        @endforeach
+        </div>
+
+        <!-- Košík vpravo -->
+        <div class="lg:w-1/4 bg-gray-900 text-white rounded-lg shadow-md p-4 h-fit sticky top-24">
+            <h2 class="text-xl font-bold mb-4">🛒 Tvůj košík</h2>
+
+            @if(session('cart') && count(session('cart')) > 0)
+                <ul class="space-y-4">
+                    @foreach (session('cart') as $id => $item)
+                        <li class="bg-gray-800 p-3 rounded flex justify-between items-center">
+                            <div>
+                                <strong>{{ $item['name'] }}</strong><br>
+                                <span class="text-sm text-gray-300">Cena: {{ $item['price'] }} Kč × {{ $item['quantity'] }}</span>
+                            </div>
+                            <form action="{{ route('cart.remove', $id) }}" method="POST">
+                                @csrf
+                                <button class="text-red-400 hover:underline">Odebrat</button>
+                            </form>
+                        </li>
+                    @endforeach
+                </ul>
+
+                <!-- Tlačítko Pokračovat k platbě -->
+                <div class="mt-6 text-center">
+                    <a href="{{ route('checkout') }}"
+                       class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded font-semibold transition">
+                        Pokračovat k platbě
+                    </a>
+                </div>
+            @else
+                <p class="text-gray-400">Košík je prázdný.</p>
+            @endif
+        </div>
     </div>
 </div>
 @endsection

@@ -1,3 +1,4 @@
+@section('page-class', 'questions-page')
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -32,7 +33,7 @@
         }
         body {
             background-color: grey;
-            color: aqua;
+            color: rgb(0, 0, 0);
         }
         .layout-wrapper {
             display: flex;
@@ -84,7 +85,30 @@
         .content-wrapper {
             opacity: 0;
             transition: opacity 1s ease-in-out;
+            position: relative;
+            z-index: 2;
+            padding-top: 30vh; /* výchozí velké odsazení pro hlavní stránku */
+
+    /* SPECIFICKY pro questions stránku menší padding */
+        .content-wrapper.questions-page {
+            padding-top: 2rem !important;
+            margin-top: 0 !important;
         }
+}   
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -2;
+            object-fit: cover;
+            object-position: center top; /* Přidáno - posune video nahoru */
+    }
+
+
 
         /* When the transition ends, content becomes visible */
         .content-visible {
@@ -97,291 +121,225 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            padding: 15px;
-            background-color: #2d2846;
-            color: white;
-            font-size: 18px;
+            padding: 0.8rem 1.2rem;
+            background: linear-gradient(90deg, #1f2937, #374151); /* tmavě modro-šedá */
+            color: #e5e7eb; /* světlejší bílá */
+            font-size: 16px;
+            font-weight: 500;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease-in-out;
-        }
+            transition: background 0.4s ease, transform 0.3s ease;
+            box-shadow: 0 2px 8px rgba(31, 41, 55, 0.4);
+}
 
-        .question-button:hover {
-            transform: scale(1.05);
-            background-color: #22263a;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
+
+.questions-page {
+    padding-top: 6rem; /* nebo kolik chceš - třeba 4rem, 5rem */
+}
+
+
+.question-button:hover {
+    background: linear-gradient(90deg, #374151, #4b5563); /* lehce světlejší modro-šedá */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(75, 85, 99, 0.4);
+}
 
         /* Fade-in and slide-up for answers */
         .answer {
-            height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transition: height 0.5s ease, opacity 0.5s ease;
-        }
-
-        .answer.show {
-            height: auto; /* Automatická výška podle obsahu */
-            opacity: 1;
-        }
-
-        /* Scroll animations */
-        .scroll-animate {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 1s ease-out, transform 1s ease-out;
-        }
-
-        .scroll-animate.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Button text fade animation */
-        .question-button span {
-            transition: transform 0.3s ease;
-        }
-
-        .question-button.show span {
-            transform: rotate(45deg);
-        }
-
-        /* Animace pro zobrazení odpovědi */
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Skrytí odpovědi */
-        .answer {
-            display: none;
-        }
-
-        /* Zobrazení odpovědi s animací */
-        .show {
-            display: block;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .question-section {
-            margin-bottom: 2rem;
-        }
-
-        .question-section button {
-            width: 100%;
-            text-align: left;
-            padding: 15px;
-            background-color: #333958;
-            color: white;
-            font-size: 18px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .toggle-icon {
-        font-weight: bold;
-        font-size: 24px;
-        margin-left: 1rem;
-            transition: transform 0.3s ease;
-        }
-
-        .question-section button:focus {
-            outline: none;
-        }
-        .faq-box {
-        background-color: #1e1e2e;
+            position: relative;
+        background: linear-gradient(135deg, #1f2937, #374151); /* tmavá elegance */
+        color: #d1d5db;
         border-radius: 12px;
-        padding: 2rem;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-        max-height: 600px;
-        overflow-y: scroll;
-        scrollbar-width: thin;
-        scrollbar-color: #6c63ff transparent;
+        margin-top: 1rem;
+        padding: 1.5rem;
+        font-size: 15px;
+        overflow: hidden;
+        display: none;
 }
 
-.faq-box::-webkit-scrollbar {
-    width: 8px;
-}
-.faq-box::-webkit-scrollbar-thumb {
-    background-color: #6c63ff;
-    border-radius: 6px;
-}
-.faq-box::-webkit-scrollbar-track {
-    background: transparent;
+.answer.show {
+    display: block;
+    animation: fadeIn 0.5s ease-out, breatheGlow 6s ease-in-out infinite;
 }
 
-/* Lepší rozložení pro tlačítko otázky */
-.question-button {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* Efekt "breathe" - světlo se jemně zvětšuje a zmenšuje */
+@keyframes breatheGlow {
+    0% {
+        box-shadow: 0 0 10px rgba(75, 85, 99, 0.4), 0 0 20px rgba(75, 85, 99, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(107, 114, 128, 0.5), 0 0 30px rgba(107, 114, 128, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(75, 85, 99, 0.4), 0 0 20px rgba(75, 85, 99, 0.3);
+    }
 }
 
-.question-text {
-    flex: 1;
-    text-align: left;
+/* Jemné pulsování gradientu na pozadí odpovědi */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.toggle-icon {
-    margin-left: 1rem;
-    font-size: 24px;
-    font-weight: bold;
-    transition: transform 0.3s ease;
+/* Animující gradient pozadí */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Pokud chceš aby odpovědi trošku "dýchaly" barevně */
+.answer {
+    background-size: 300% 300%;
+    animation: gradientShift 12s ease infinite;
 }
 
     </style>
 </head>
 <body class="font-sans antialiased">
     <div class="layout-wrapper bg-gray-100 dark:bg-gray-900">
-        <!-- Page transition overlay with "Barvio" text -->
-        <div class="page-transition">
-            <div class="transition-text">Barvio</div>
-            <div class="transition-sub">Ecologic colors without oil</div>
-        </div>
 
         @include('layouts.navigation')
 
-        <main class="content-wrapper">
-            <div class="container mx-auto py-10">
-                <h1 class="text-5xl font-semibold text-center mb-8 text-white scroll-animate">Časté dotazy</h1>
+        <!-- OBSAH STRÁNKY -->
+        <main class="content-wrapper questions-page">
+
+            <!-- Tohle zabalíme do menšího containeru -->
+            <div class="container mx-auto max-w-4xl pt-0 pb-10">
                 <div class="space-y-6">
-                    <!-- Dotazy a odpovědi -->
-        <div class="question-section">
-            <button class="question-button" onclick="toggleAnswer(this)">
-                <span class="question-text">Co nabízíte?</span>
-                <span class="toggle-icon">+</span>
-            </button>
-            <div class="answer hidden mt-2 text-purple-400 px-6">
-                Popis vašich produktů, služeb nebo činností.
-            </div>
-        </div>
+        
+                    <!-- JEDNOTLIVÉ DOTAZY -->
+                    <div class="space-y-6">
 
-        <div class="question-section">
-            <button class="question-button" onclick="toggleAnswer(this)">
-                <span class="question-text">Jak mohu vrátit produkt nebo zrušit objednávku?</span>
-                <span class="toggle-icon">+</span>
-            </button>
-            <div class="answer hidden mt-2 text-purple-400 px-6">
-                Vysvětlení podmínek pro vracení zboží nebo zrušení služby.
-            </div>
-        </div>
-
-        <div class="question-section">
-            <button class="question-button" onclick="toggleAnswer(this)">
-                <span class="question-text">Jaké metody platby akceptujete?</span>
-                <span class="toggle-icon">+</span>
-            </button>
-            <div class="answer hidden mt-2 text-purple-400 px-6">
-                Seznam všech dostupných platebních metod (např. kreditní karty, PayPal, bankovní převod).
-            </div>
-        </div>
-
-        <div class="question-section">
-            <button class="question-button" onclick="toggleAnswer(this)">
-                <span class="question-text">Máte nějaké slevy nebo akce?</span>
-                <span class="toggle-icon">+</span>
-            </button>
-            <div class="answer hidden mt-2 text-purple-400 px-6">
-                Informace o aktuálních slevách, kupónech nebo speciálních nabídkách.
-            </div>
-        </div>
-
-        <div class="question-section">
-            <button class="question-button" onclick="toggleAnswer(this)">
-                <span class="question-text">Reklamace</span>
-                <span class="toggle-icon">+</span>
-            </button>
-            <div class="answer hidden mt-2 text-purple-400 px-6">
-                Reklamační řízení může být zahájeno, jestliže zákazník předloží kompletní reklamové zboží, prokáže nákup reklamovaného zboží dokladem o nákupu (prodejkou, fakturou) a doloží vyplněný list.
-            </div>
-        </div>
-
-        <div class="question-section">
-            <button class="question-button" onclick="toggleAnswer(this)">
-                <span class="question-text">Jaké máte otevírací hodiny?</span>
-                <span class="toggle-icon">+</span>
-            </button>
-            <div class="answer hidden mt-2 text-purple-400 px-6">
-                Otevírací doba v týdnu, víkendy a svátky.
-            </div>
-        </div>
-
-        <div class="question-section">
-            <button class="question-button" onclick="toggleAnswer(this)">
-                <span class="question-text">Jaké jsou podmínky pro vrácení zboží?</span>
-                <span class="toggle-icon">+</span>
-            </button>
-            <div class="answer hidden mt-2 text-purple-400 px-6">
-                Podmínky pro vrácení zboží a proces pro jeho vrácení.
-            </div>
-        </div>
-
-        <div class="question-section">
-            <button class="question-button" onclick="toggleAnswer(this)">
-                <span class="question-text">Jak mohu změnit svou objednávku?</span>
-                <span class="toggle-icon">+</span>
-            </button>
-            <div class="answer hidden mt-2 text-purple-400 px-6">
-                Pokyny pro úpravu objednávky po jejím zadání.
-            </div>
-        </div>
-
+                        <div class="container mx-auto max-w-5xl pt-10 pb-20 space-y-16">    
+    <!-- KATEGORIE: Péče o rostliny -->
+    <div>
+        <h2 class="text-3xl font-bold text-indigo-400 mb-6">🌱 Péče o rostliny</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- Jednotlivé otázky -->
+            <div class="question-section">
+                <button class="question-button" onclick="toggleAnswer(this)">
+                    Jak pečovat o pokojové rostliny?
+                    <span class="toggle-icon">+</span>
+                </button>
+                <div class="answer hidden mt-2 px-6">
+                    Pravidelná zálivka, dostatek světla a občasné hnojení jsou základem správné péče.
                 </div>
             </div>
-        </main>
+
+            <div class="question-section">
+                <button class="question-button" onclick="toggleAnswer(this)">
+                    Jak často mám zalévat rostliny?
+                    <span class="toggle-icon">+</span>
+                </button>
+                <div class="answer hidden mt-2 px-6">
+                    Záleží na druhu, většinou 1x týdně. V létě častěji, v zimě méně.
+                </div>
+            </div>
+
+            <div class="question-section">
+                <button class="question-button" onclick="toggleAnswer(this)">
+                    Jak zachránit přelitou rostlinu?
+                    <span class="toggle-icon">+</span>
+                </button>
+                <div class="answer hidden mt-2 px-6">
+                    Nechte půdu vyschnout a případně přesadit do suchého substrátu.
+                </div>
+            </div>
+
+            <div class="question-section">
+                <button class="question-button" onclick="toggleAnswer(this)">
+                    Jak poznám škůdce na rostlinách?
+                    <span class="toggle-icon">+</span>
+                </button>
+                <div class="answer hidden mt-2 px-6">
+                    Sledujte drobné tečky, pavučinky nebo deformace listů.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KATEGORIE: Objednávky a doručení -->
+    <div>
+        <h2 class="text-3xl font-bold text-indigo-400 mb-6">📦 Objednávky a doručení</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="question-section">
+                <button class="question-button" onclick="toggleAnswer(this)">
+                    Jak je rostlina balená při doručení?
+                    <span class="toggle-icon">+</span>
+                </button>
+                <div class="answer hidden mt-2 px-6">
+                    Rostliny pečlivě balíme do ochranného obalu, aby se při přepravě nepoškodily.
+                </div>
+            </div>
+
+            <div class="question-section">
+                <button class="question-button" onclick="toggleAnswer(this)">
+                    Kdy obdržím svou objednávku?
+                    <span class="toggle-icon">+</span>
+                </button>
+                <div class="answer hidden mt-2 px-6">
+                    Objednávky odesíláme do 2 pracovních dnů, doručení trvá obvykle 1–3 dny.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KATEGORIE: Tipy a rady -->
+    <div>
+        <h2 class="text-3xl font-bold text-indigo-400 mb-6">💬 Tipy a rady</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="question-section">
+                <button class="question-button" onclick="toggleAnswer(this)">
+                    Jaké rostliny čistí vzduch v interiéru?
+                    <span class="toggle-icon">+</span>
+                </button>
+                <div class="answer hidden mt-2 px-6">
+                    Například lopatkovec, břečťan nebo tchynin jazyk jsou skvělé na čištění vzduchu.
+                </div>
+            </div>
+
+            <div class="question-section">
+                <button class="question-button" onclick="toggleAnswer(this)">
+                    Jaké světlo je ideální pro rostliny?
+                    <span class="toggle-icon">+</span>
+                </button>
+                <div class="answer hidden mt-2 px-6">
+                    Ideální je světlé místo bez přímého poledního slunce – například u východního okna.
+                </div>
+            </div>
+
+            <div class="question-section">
+                <button class="question-button" onclick="toggleAnswer(this)">
+                    Proč má moje rostlina žluté listy?
+                    <span class="toggle-icon">+</span>
+                </button>
+                <div class="answer hidden mt-2 px-6">
+                    Může jít o přelití, stres nebo nedostatek živin. Zkontrolujte podmínky pěstování.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</main> 
 
         @include('components.floating-button')
         @include('components.footer')
+
     </div>
 
-    <!-- Page Transition Script -->
+    <!-- Skript pro animace -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
-            if (!hasVisitedBefore) {
-                const pageTransition = document.querySelector('.page-transition');
-                const contentWrapper = document.querySelector('.content-wrapper');
-                const transitionText = document.querySelector('.transition-text');
-                const transitionSub = document.querySelector('.transition-sub');
-
-                const tl = gsap.timeline({
-                    onComplete: () => {
-                        contentWrapper.classList.add('content-visible');
-                        document.body.style.overflow = 'auto';
-                    }
-                });
-
-                tl.to(pageTransition, { scaleX: 1, duration: 1.5, transformOrigin: 'left' })
-                  .to(transitionText, { opacity: 1, y: -50, duration: 1.5, ease: "power3.out" })
-                  .to(transitionSub, { opacity: 1, y: -50, duration: 1.5, ease: "power3.out" })
-                  .to(transitionText, { opacity: 0, y: -50, duration: 0.5, ease: "power3.out" })
-                  .to(transitionSub, { opacity: 0, y: -50, duration: 0.5, ease: "power3.in" })
-                  .to(pageTransition, { scaleX: 0, duration: 1.5, transformOrigin: 'right' });
-
-                localStorage.setItem('hasVisitedBefore', 'true');
-            } else {
-                document.querySelector('.content-wrapper').classList.add('content-visible');
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-        window.addEventListener('scroll', () => {
-            const scrollElems = document.querySelectorAll('.scroll-animate');
-            scrollElems.forEach(elem => {
-                const rect = elem.getBoundingClientRect();
-                if (rect.top <= window.innerHeight) {
-                    elem.classList.add('show');
-                }
-            });
-        });
-
         function toggleAnswer(button) {
             const answer = button.nextElementSibling;
             const isHidden = answer.classList.contains('hidden');
@@ -390,5 +348,43 @@
             button.querySelector('.toggle-icon').textContent = isHidden ? '−' : '+';
         }
     </script>
+
+    <!-- Page Transition Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
+            const pageTransition = document.querySelector('.page-transition');
+            const contentWrapper = document.querySelector('.content-wrapper');
+            const transitionText = document.querySelector('.transition-text');
+            const transitionSub = document.querySelector('.transition-sub');
+
+            if (!hasVisitedBefore) {
+                const tl = gsap.timeline({
+                    onComplete: () => {
+                        contentWrapper.classList.add('content-visible');
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+                tl.to(pageTransition, { scaleX: 1, duration: 1.5, transformOrigin: 'left' })
+                  .to(transitionText, { opacity: 1, y: -50, duration: 1.5 })
+                  .to(transitionSub, { opacity: 1, y: -50, duration: 1.5 })
+                  .to(transitionText, { opacity: 0, y: -50, duration: 0.5 })
+                  .to(transitionSub, { opacity: 0, y: -50, duration: 0.5 })
+                  .to(pageTransition, { scaleX: 0, duration: 1.5, transformOrigin: 'right' });
+                localStorage.setItem('hasVisitedBefore', 'true');
+            } else {
+                contentWrapper.classList.add('content-visible');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        window.addEventListener('scroll', () => {
+            document.querySelectorAll('.scroll-animate').forEach(elem => {
+                const rect = elem.getBoundingClientRect();
+                if (rect.top <= window.innerHeight) {
+                    elem.classList.add('show');
+                }
+            });
+        });
+    </script>
 </body>
-</html>

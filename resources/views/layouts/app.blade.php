@@ -11,38 +11,48 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            duration: 800,
+            offset: 120
+        });
+    </script>
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- GSAP for animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-    <!-- Custom Styles -->
     <style>     
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
             font-family: 'Arial', sans-serif;
-            overflow: auto; /* Allow scrolling */
+            overflow: auto;
         }
         html {
             scrollbar-width: normal;
             scrollbar-color: rgb(70, 70, 77);
         }
-        body{
+        body {
             background-color: grey;
-            color: rgb(0, 0, 0)
+            color: rgb(0, 0, 0);
         }
         .layout-wrapper {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            position: relative;
+            overflow: hidden;
         }
-
-        /* Black overlay and transition */
         .page-transition {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             height: 100vh;
@@ -52,8 +62,6 @@
             transform: scaleX(0);
             transform-origin: left;
         }
-
-        /* Text "Barvio" within the black overlay */
         .transition-text {
             font-size: 4rem;
             font-weight: bold;
@@ -63,10 +71,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            opacity: 0;  /* Start hidden */
-            z-index: 1001;  /* Above the black overlay */
+            opacity: 0;
+            z-index: 1001;
         }
-
         .transition-sub {
             font-size: 3rem;
             font-weight: bold;
@@ -76,26 +83,56 @@
             top: 60%;
             left: 50%;
             transform: translate(-50%, -50%);
-            opacity: 0;  /* Start hidden */
-            z-index: 1001;  /* Above the black overlay */
+            opacity: 0;
+            z-index: 1001;
         }
-
-        /* Main content wrapper */
         .content-wrapper {
             opacity: 0;
             transition: opacity 1s ease-in-out;
+            position: relative;
+            z-index: 2;
         }
-
-        /* When the transition ends, content becomes visible */
         .content-visible {
             opacity: 1;
         }
-        
+        [data-aos] {
+            transition-property: transform, opacity;
+        }
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -2;
+            object-fit: cover;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: -1;
+        }
     </style>
 </head>
 <body class="font-sans antialiased">
-    <div class="layout-wrapper bg-gray-100 dark:bg-gray-900">
-        <!-- Page transition overlay with "Barvio" text -->
+    <div class="layout-wrapper">
+
+        <!-- Video pozadí -->
+        <video autoplay muted loop class="video-background">
+            <source src="{{ asset('videos/background.mp4') }}" type="video/mp4">
+            Váš prohlížeč nepodporuje HTML5 video.
+        </video>
+
+        <!-- Tmavé překrytí přes video -->
+        <div class="overlay"></div>
+
+        <!-- Page transition overlay -->
         <div class="page-transition">
             <div class="transition-text">Barvio</div>
             <div class="transition-sub">Ecologic colors without oil</div>
@@ -103,73 +140,51 @@
 
         @include('layouts.navigation')
 
-        <main class="content-wrapper">
+        <main class="content-wrapper questions-page flex-grow">
             @yield('content')
         </main>
+
         @include('components.floating-button')
         @include('components.footer')
     </div>
 
-    <!-- Page Transition Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Check if the transition has already been shown
             const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
+            const initAOS = () => {
+                AOS.init({
+                    duration: 800,
+                    easing: 'ease-out-quad',
+                    once: true,
+                    offset: 120,
+                    delay: 200
+                });
+            };
 
-            // If it's the user's first visit, show the page transition
             if (!hasVisitedBefore) {
-                const pageTransition = document.querySelector('.page-transition');
-                const contentWrapper = document.querySelector('.content-wrapper');
-                const transitionText = document.querySelector('.transition-text');
-                const transitionSub = document.querySelector('.transition-sub');
-
-                // GSAP animation for page transition
                 const tl = gsap.timeline({
                     onComplete: () => {
-                        contentWrapper.classList.add('content-visible'); // Make content visible after transition
-                        document.body.style.overflow = 'auto';  // Re-enable scrolling after transition
+                        document.querySelector('.content-wrapper').classList.add('content-visible');
+                        document.body.style.overflow = 'auto';
+                        initAOS();
                     }
                 });
 
-                // Transition animation for the black overlay
-                tl.to(pageTransition, { scaleX: 1, duration: 1.5, transformOrigin: 'left' })  // Expand black overlay
+                tl.to('.page-transition', { scaleX: 1, duration: 1.5, transformOrigin: 'left' })
+                  .to('.transition-text', { opacity: 1, y: -50, duration: 1.5, ease: "power3.out" }, 0)
+                  .to('.transition-sub', { opacity: 1, y: -50, duration: 1.5, ease: "power3.out" }, 0.2)
+                  .to('.transition-text', { opacity: 0, y: -80, duration: 0.5, ease: "power3.out" }, 1.5)
+                  .to('.transition-sub', { opacity: 0, y: -80, duration: 0.5, ease: "power3.in" }, 1.5)
+                  .to('.page-transition', { scaleX: 0, duration: 1.5, transformOrigin: 'right' });
 
-                // Animate the "Barvio" text within the black overlay
-                .to(transitionText, {
-                    opacity: 1, // Show text
-                    y: -50, // Move it slightly up
-                    duration: 1.5,
-                    ease: "power3.out",
-                })   
-                .to(transitionSub, {
-                    opacity: 1, // Show text
-                    y: -50, // Move it slightly up
-                    duration: 1.5,
-                    ease: "power3.out",
-                }) 
-                .to(transitionText, {
-                    opacity: 0, // Hide text
-                    y: -50, // Move it slightly up
-                    duration: 0.5,
-                    ease: "power3.out",
-                })  
-                .to(transitionSub, {
-                    opacity: 0, // Hide text
-                    y: -50, // Move it slightly up
-                    duration: 0.5,
-                    ease: "power3.in",
-                })
-                .to(pageTransition, { scaleX: 0, duration: 1.5, transformOrigin: 'right' });  // Shrink black overlay
-
-                // Mark as visited to avoid showing the transition on subsequent visits
                 localStorage.setItem('hasVisitedBefore', 'true');
             } else {
-                // If the user has already visited, directly show the content
                 document.querySelector('.content-wrapper').classList.add('content-visible');
-                document.body.style.overflow = 'auto';  // Ensure scrolling is enabled
+                document.body.style.overflow = 'auto';
+                initAOS();
             }
         });
-        console.log('Page transition completed');
     </script>
 </body>
 </html>
